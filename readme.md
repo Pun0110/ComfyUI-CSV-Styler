@@ -1,33 +1,31 @@
 # CSV Styler
 
-Repository contains CSV Styler - custom node for ComfyUI. It loads styles from styles.csv file (Automatic1111 Web-Ui styles.csv format) and combine them with provided positive and negative prompt.
+Repository contains CSV Styler - custom node for ComfyUI. The provided positive and negative prompts are processed according to selected style (styles parsed from `styles.csv` - Automatic1111 Web-Ui like format).
 
-styles.csv should be placed in ComfyUI root directory (near main.py).
+`styles.csv` should be placed in ComfyUI root directory (near `main.py`).
 
 ## Usage example
 
-Style phrase combined with provided positive and negative prompts. {prompt} keyworld is also taken into account.
+Provide positive and negative prompts in your preffered way and select necessary style. `{prompt}` keyworld in style is also taken into account.
+![usage example](imgs/img_01.png "usage example")
 
-![usage example](img.png "usage example")
+Also style processing can be turned off (bypass mode). Input passed unchanged.
+![usage example](imgs/img_02.png "usage example")
 
 ## Installation
 
-### Simple option
+### ComfyUI Manager
 
-~~You can install CSV Styler using the ComfyUI Manager.~~ in progress...
+CSV Styler can be installed using the ComfyUI Manager. Search for `ComfyUI-CSV-Styler`.
 
 ### Manual option
 
-Run within (ComfyUI)/custom_nodes/ folder:
+Repo cloning. Execute command in (ComfyUI)/`custom_nodes` folder:
 
 ~~~
 git clone https://github.com/Pun0110/ComfyUI-CSV-Styler.git
 ~~~
 
-## debug
+## Debug
 
-...
-
-## Known issues
-
-...
+The script outputs some diagnostic information to the console.

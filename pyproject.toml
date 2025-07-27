@@ -1,0 +1,12 @@
+[project]
+name = "ComfyUI-CSV-Styler"
+description = "Node for applying styles to prompts. styles.csv compatible with Automatic1111 Web-UI"
+version = "1.0.1"
+
+[project.urls]
+Repository = "https://github.com/Pun0110/ComfyUI-CSV-Styler"
+
+[tool.comfy]
+PublisherId = "pun0110"
+DisplayName = "CSV-Styler"
+Icon = ""

@@ -8,12 +8,11 @@ class PT_CSVStyler:
 
     @staticmethod
     def load_styles(stylesCSV):
-        print(f'PT.CSVStyler: Loading styles from {stylesCSV}')
 
         stylesDict={}
 
         if not os.path.exists(stylesCSV):
-            print(f"Error! No styles.csv found. Put styles.csv in the root directory of ComfyUI.")
+            print(f"PT.CSVStyler: Error! No styles.csv found. Put styles.csv in the root directory of ComfyUI.")
             return stylesDict
 
         try:
@@ -28,7 +27,7 @@ class PT_CSVStyler:
             stylesDict = {item[0]: item[1:] for item in styles}         # list -> dict   
 
         except Exception as ex:
-            print(f"Error loading styles.csv. Error: {ex}")
+            print(f"PT.CSVStyler: Error loading styles.csv. Error: {ex}")
 
         return stylesDict
     
@@ -40,7 +39,10 @@ class PT_CSVStyler:
             if key_word in style:
                 processedPrompt = style.replace(key_word, prompt)
             else:
-                processedPrompt = f'{style}, {prompt}'      # extra comma after style definition, mb unnecessary
+                if prompt:
+                    processedPrompt = f'{style}, {prompt}'      # extra comma after style definition, mb unnecessary
+                else:
+                    processedPrompt = f'{style}'                # if prompt empty pass only style field
         else:
             processedPrompt = prompt
 
@@ -53,6 +55,9 @@ class PT_CSVStyler:
         return {
             "required": {
                 "styles": (list(cls.stylesList.keys()),),
+                "bypass_mode": ("BOOLEAN", {
+                    "default": False,
+                    "tooltip": "Bypass processing"}),
                 "positive": ("STRING", {
                     "multiline": True,
                     "tooltip": "Positive prompt"
@@ -71,21 +76,33 @@ class PT_CSVStyler:
 
     CATEGORY = "conditioning"
 
-    def process(self, positive, negative, styles):
+    DESCRIPTION = """
+    Process prompts according to selected style
+    
+    Settings:
+    - bypass_mode: Bypass processing (pass input unchanged)
+    """
+
+    def process(self, styles, bypass_mode, positive, negative):
 
         stylePositive = self.stylesList[styles][0].strip('"')
         styleNegative = self.stylesList[styles][1].strip('"')
 
-        processedPositive = self.style_processor(stylePositive, positive)
-        processedNegative = self.style_processor(styleNegative, negative)
+        if not bypass_mode:
+            processedPositive = self.style_processor(stylePositive, positive)
+            processedNegative = self.style_processor(styleNegative, negative)
 
-        print(f'PT.CSVStyler: Processing\n\
+        else:
+            processedPositive = positive
+            processedNegative = negative
+
+        print(f'PT.CSVStyler: Processing...\n\
             Style Positive -> {stylePositive}\n\
             Style Negative -> {styleNegative}\n\
-            Positive -> {positive}\n\
-            Negative -> {negative}\n\
-            processedPositive -> {processedPositive}\n\
-            processedNegative -> {processedNegative}')
+            Inbound Positive -> {positive}\n\
+            Inbound Negative -> {negative}\n\
+            Outbound Positive -> {processedPositive}\n\
+            Outbound Negative -> {processedNegative}')
 
         return (processedPositive, processedNegative)
         
