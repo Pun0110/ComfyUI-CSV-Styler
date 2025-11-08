@@ -13,6 +13,7 @@ class PT_CSVStyler:
 
         if not os.path.exists(stylesCSV):
             print(f"PT.CSVStyler: Error! No styles.csv found. Put styles.csv in the root directory of ComfyUI.")
+            stylesDict["none"] = ["{prompt}", "{prompt}"]               # stub, if styles.csv not found
             return stylesDict
 
         try:
